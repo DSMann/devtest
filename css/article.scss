@@ -1,0 +1,106 @@
+main {
+    width: 75vw;
+    max-width: var(--breakpoint--400);
+    margin: 0 auto;
+}
+
+.photo-viewer {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: var(--spacing--500);
+
+    &__letterbox {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-top: 56.25%;
+        margin-bottom: var(--spacing--100);
+        background: var(--gray-light);
+    }
+
+    &__current-photo {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        opacity: 1;
+
+        &.loading {
+            opacity: 0;
+        }
+    }
+
+    &__selector {
+        display: flex;
+        justify-content: flex-end;
+        flex: 1 1 auto;
+        max-width: 60%;
+        overflow-x: auto;
+        opacity: 1;
+
+        li:not(:last-child) {
+            margin-right: var(--spacing--100);
+        }
+
+        img {
+            &.active, &:hover, &:focus {
+                opacity: .7;
+            }
+        }
+    }
+
+    figcaption {
+        flex: 1 0 40%;
+        min-width: 40%;
+    }
+
+    img {
+        object-fit: contain;
+        transition: opacity .3s;
+    }
+}
+
+section > * {
+    max-width: var(--breakpoint--300);
+}
+
+.media {
+    float: right;
+    width: 45%;
+    margin: var(--spacing--200);
+    margin-right: 0;
+
+    .media__video {
+        position: relative;
+
+        &:not(.playing):after {
+            pointer-events: none;
+            display: inline-block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: var(--font-size--500);
+            transform: translate(-50%, -50%);
+            padding: .34em 0 0 .17em;
+            text-align: center;
+            background: var(--gray-dark-t);
+            color: var(--gray-light);
+            content: "\25B6";
+            border-radius: 50%;
+            width: 2em;
+            height: 2em;
+        }
+    }
+
+    video {
+        width: 100%;
+        object-fit: contain;
+    }
+
+    figcaption {
+        margin: 0 var(--spacing--75);
+        border-bottom: 1px solid var(--gray-dark);
+    }
+}
