@@ -6,7 +6,7 @@ currentPhoto.addEventListener(`load`, () => {
     currentPhoto.classList.remove(`loading`);
 });
 
-let photos = Array.from(document.querySelectorAll(`.photo-viewer__selector img`), img => {
+const photos = Array.from(document.querySelectorAll(`.photo-viewer__selector img`), img => {
     img.addEventListener(`click`, () => {
         photos.forEach(img => {
             img.classList.remove(`active`);

@@ -64,6 +64,12 @@ h2 {
     margin: var(--spacing--400) 0 var(--spacing--200);
 }
 
+main {
+    width: 75vw;
+    max-width: var(--breakpoint--400);
+    margin: var(--spacing--400) auto;
+}
+
 .title {
     font-size: var(--font-size--500);
     font-weight: 700;
