@@ -31,4 +31,9 @@
         margin: 0 var(--spacing--75);
         border-bottom: 1px solid var(--gray-dark);
     }
+
+    &__image {
+        width: 100%;
+        object-fit: contain;
+    }
 }

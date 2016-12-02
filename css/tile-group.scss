@@ -1,0 +1,32 @@
+.tile-group {
+    &:not(:last-of-type) {
+        margin-bottom: var(--spacing--500);
+    }
+
+    &__tiles {
+        display: flex;
+    }
+
+    .tile {
+        flex: 1;
+
+        &:not(:last-child) {
+            margin-right: var(--spacing--350);
+        }
+    }
+
+    &__header {
+        border-bottom: var(--spacing--50) solid;
+        margin-bottom:var(--spacing--350);
+
+        .tile-group:nth-child(3n + 1) & {
+            border-color: var(--red);
+        }
+        .tile-group:nth-child(3n + 2) & {
+            border-color: var(--blue);
+        }
+        .tile-group:nth-child(3n) & {
+            border-color: var(--green);
+        }
+    }
+}

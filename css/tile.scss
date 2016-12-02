@@ -1,14 +1,5 @@
 .tile {
-    display: flex;
-    justify-content: space-between;
-
-    .media {
-        flex: calc(1/3);
-        margin-right: var(--spacing--300);
-    }
-
     &__content {
-        flex: calc(2/3);
         display: flex;
         flex-direction: column;
     }
@@ -19,8 +10,20 @@
     }
 
     &--large {
+        flex-direction: row;
+        justify-content: space-between;
+
         .tile__meta {
             order: -1;
+        }
+
+        .tile__content {
+            flex: calc(2/3);
+        }
+
+        .media {
+            flex: calc(1/3);
+            margin-right: var(--spacing--300);
         }
 
         &.tile--played {
