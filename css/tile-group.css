@@ -1,0 +1,31 @@
+.tile-group:not(:last-of-type) {
+    margin-bottom: var(--spacing--500);
+}
+.tile-group__tiles {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+.tile-group .tile {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+}
+.tile-group .tile:not(:last-child) {
+    margin-right: var(--spacing--350);
+}
+.tile-group__header {
+    border-bottom: var(--spacing--50) solid;
+    margin-bottom: var(--spacing--350);
+}
+.tile-group:nth-child(3n + 1) .tile-group__header {
+    border-color: var(--red);
+}
+.tile-group:nth-child(3n + 2) .tile-group__header {
+    border-color: var(--blue);
+}
+.tile-group:nth-child(3n) .tile-group__header {
+    border-color: var(--green);
+}

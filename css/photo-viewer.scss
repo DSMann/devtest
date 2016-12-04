@@ -1,0 +1,57 @@
+.photo-viewer {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: var(--spacing--500);
+
+    &__letterbox {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-top: 56.25%;
+        margin-bottom: var(--spacing--100);
+        background: var(--gray-light);
+    }
+
+    &__current-photo {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        opacity: 1;
+
+        &.loading {
+            opacity: 0;
+        }
+    }
+
+    &__selector {
+        display: flex;
+        justify-content: flex-end;
+        flex: 1 1 auto;
+        max-width: 60%;
+        overflow-x: auto;
+        opacity: 1;
+
+        li:not(:last-child) {
+            margin-right: var(--spacing--100);
+        }
+
+        img {
+            &.active, &:hover, &:focus {
+                opacity: .7;
+            }
+        }
+    }
+
+    figcaption {
+        flex: 1 0 40%;
+        min-width: 40%;
+    }
+
+    img {
+        object-fit: contain;
+        transition: opacity .3s;
+    }
+}

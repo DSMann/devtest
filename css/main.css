@@ -1,59 +1,78 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,700');
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,700");
 
 :root {
-    /*  FONT SIZES */
-    --font-size--700: 4.3rem;
-    --font-size--600: 3.2rem;
-    --font-size--500: 2.5rem;
-    --font-size--400: 1.8rem;
-
-    /*  COLORS */
-    --red: rgb(223, 70, 97);
-    --blue: rgb(0, 95, 131);
-    --green: rgb(107, 165, 57);
-    --gray-dark: rgb(51, 51, 51);
-    --gray-light: rgb(208, 211, 212);
-
-    /*  SPACING */
-    --spacing--500: 90px;
-    --spacing--400: 36px;
-    --spacing--350: 26px;
-    --spacing--300: 24px;
-    --spacing--200: 18px;
-    --spacing--100: 10px;
-    --spacing--75: 7px;
-    --spacing--50: 4px;
+  /*  FONT SIZES */
+  --font-size--700: 4.3rem;
+  --font-size--600: 3.2rem;
+  --font-size--500: 2.5rem;
+  --font-size--400: 1.8rem;
+  /*  COLORS */
+  --red: #df4661;
+  --blue: #005f83;
+  --green: #6ba539;
+  --gray-dark: #333333;
+  --gray-dark-t: rgba(51, 51, 51, 0.7);
+  --gray-light: #d0d3d4;
+  /*  SPACING */
+  --spacing--500: 90px;
+  --spacing--400: 36px;
+  --spacing--350: 26px;
+  --spacing--300: 24px;
+  --spacing--200: 18px;
+  --spacing--100: 10px;
+  --spacing--75: 7px;
+  --spacing--50: 4px;
 }
 
 *, *::before, *::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 html {
-    min-height: 100vh;
-    font-size: 10px;
+  min-height: 100vh;
+  font-size: 10px;
 }
 
 body {
-    font-size: var(--font-size--400);
-    font-family: 'Open Sans', sans-serif;
-    color: var(--gray-dark);
-    line-height: 1.4;
+  font-size: var(--font-size--400);
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  color: var(--gray-dark);
+  line-height: 1.4;
 }
 
 h1 {
-    font-size: var(--font-size--700);
-    font-weight: 300;
+  font-size: var(--font-size--700);
+  font-weight: 300;
 }
 
 h2 {
-    font-size: var(--font-size--600);
-    font-weight: 300;
+  font-size: var(--font-size--600);
+  font-weight: 300;
+  margin: var(--spacing--400) 0 var(--spacing--200);
+}
+
+main {
+  width: 75vw;
+  max-width: 840px;
+  margin: var(--spacing--400) auto;
 }
 
 .title {
-    font-size: var(--font-size--500);
-    font-weight: 700;
+  font-size: var(--font-size--500);
+  font-weight: 700;
+}
+
+p {
+  margin-bottom: var(--spacing--200);
+}
+
+header p, figcaption p {
+  margin: 0;
+}
+
+ol, ul {
+  list-style: none;
 }

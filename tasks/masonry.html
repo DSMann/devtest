@@ -10,18 +10,21 @@
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="stylesheet" type="text/css" href="css/masonry.css">
+    <link rel="stylesheet" type="text/css" href="css/media.css">
+    <link rel="stylesheet" type="text/css" href="css/tile.css">
 </head>
 <body>
     <header>
         <nav></nav>
     </header>
     <main>
-        <div class="tile-group">
-            <button>Load More</button>
+        <div class="masonry">
+            <div class="masonry__container"></div>
+            <button class="masonry__trigger">Load More</button>
         </div>
     </main>
     <footer>
     </footer>
-    <script src="js/masonry.js"></script>
+    <script src="js/masonry.babelified.js"></script>
 </body>
 </html>

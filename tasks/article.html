@@ -10,6 +10,8 @@
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="stylesheet" type="text/css" href="css/article.css">
+    <link rel="stylesheet" type="text/css" href="css/media.css">
+    <link rel="stylesheet" type="text/css" href="css/photo-viewer.css">
 </head>
 <body>
     <header>
@@ -26,13 +28,13 @@
                     <img class="photo-viewer__current-photo" src="images/full/photo01.jpg" alt="photo 1">
                 </div>
                 <figcaption>
-                    <p class="title">Title for the image</p>
-                    <p class="caption">caption for the image</p>
+                    <p class="title">Lorem ipsum</p>
+                    <p class="caption">Amet optio tenetur doloremque adipisci assumend</p>
                 </figcaption>
                 <ul class="photo-viewer__selector">
-                    <li><img src="images/thumbnail/photo01.jpg" alt="photo 1"></li>
-                    <li><img src="images/thumbnail/photo02.jpg" alt="photo 2"></li>
-                    <li><img src="images/thumbnail/photo03.jpg" alt="photo 3"></li>
+                    <li><img src="images/thumbnail/photo01.jpg" alt="photo 1" title="Lorem ipsum" data-caption="Amet optio tenetur doloremque adipisci assumenda" tabindex="0"></li>
+                    <li><img src="images/thumbnail/photo02.jpg" alt="photo 2" title="Totam voluptas dolor" data-caption="Libero quia mollitia fugiat tempore odit vel" tabindex="0"></li>
+                    <li><img src="images/thumbnail/photo03.jpg" alt="photo 3" title="Ipsam laboriosam nobis" data-caption="Dolores quis possimus harum rem cum impedit" tabindex="0"></li>
                 </ul>
             </figure>
             <section>
@@ -77,6 +79,8 @@
     </main>
     <footer>
     </footer>
+    <script src="js/video.js"></script>
+    <script src="js/photo-viewer.js"></script>
     <script src="js/article.js"></script>
 </body>
 </html>

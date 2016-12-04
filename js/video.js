@@ -41,13 +41,8 @@ const videoFunctions = {
     destroyAll: ([...context] = [document]) => {
         context.forEach(el => Array.from(el.querySelectorAll(`video`), videoFunctions.destroy));
     },
-    init: ([...context] = [document],
-            callbacks = {}) => {
+    init: ([...context] = [document], callbacks = {}) => {
         videoFunctions.destroyAll(context);
         context.forEach(el => videoFunctions.setupVideos(el.querySelectorAll(`video`), callbacks));
     }
 };
-
-export videoFunctions;
-
-export default videoFunctions.init;

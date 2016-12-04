@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,700');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,700');
 
 :root {
     /*  FONT SIZES */
@@ -24,16 +24,16 @@
     --spacing--100: 10px;
     --spacing--75: 7px;
     --spacing--50: 4px;
-
-    /* BREAKPOINTS */
-    --breakpoint--800: 1600px;
-    --breakpoint--700: 1440px;
-    --breakpoint--600: 1280px;
-    --breakpoint--500: 960px;
-    --breakpoint--400: 840px;
-    --breakpoint--300: 600px;
-    --breakpoint--200: 480px;
 }
+
+/* BREAKPOINTS */
+$breakpoint--800: 1600px;
+$breakpoint--700: 1440px;
+$breakpoint--600: 1280px;
+$breakpoint--500: 960px;
+$breakpoint--400: 840px;
+$breakpoint--300: 600px;
+$breakpoint--200: 480px;
 
 *, *::before, *::after {
     margin: 0;
@@ -47,8 +47,11 @@ html {
 }
 
 body {
-    font-size: var(--font-size--400);
-    font-family: 'Open Sans', sans-serif;
+    font: {
+        size: var(--font-size--400);
+        family: 'Open Sans', sans-serif;
+        weight: 300;
+    }
     color: var(--gray-dark);
     line-height: 1.4;
 }
@@ -66,7 +69,7 @@ h2 {
 
 main {
     width: 75vw;
-    max-width: var(--breakpoint--400);
+    max-width: $breakpoint--400;
     margin: var(--spacing--400) auto;
 }
 

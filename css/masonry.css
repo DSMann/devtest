@@ -1,0 +1,68 @@
+.masonry {
+    background: var(--gray-light);
+    padding: var(--spacing--350) 0 var(--spacing--350) var(--spacing--350);
+}
+.masonry__container {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-flow: column wrap;
+        -ms-flex-flow: column wrap;
+            flex-flow: column wrap;
+    -webkit-align-content: flex-start;
+        -ms-flex-line-pack: start;
+            align-content: flex-start;
+    width: 100%;
+    margin-bottom: calc(var(--spacing--350) * -1);
+    overflow: hidden;
+}
+.masonry__container > * {
+    margin: 0 var(--spacing--350) var(--spacing--350) 0;
+    width: calc(50% - var(--spacing--350));
+}
+ /*******************************************************
+  * Uncomment for responsive column numbers
+  * Also uncomment either:
+  *     line 175 in masonry.js
+  *     line 169 in masonry.babelified.js
+  *******************************************************/
+
+.masonry__container {
+    flex-wrap: nowrap;
+}
+.masonry__container > * {
+    width: calc(100% - var(--spacing--350));
+}
+@media (min-width: 600px) {
+    .masonry__container {
+        flex-wrap: wrap;
+    }
+
+    .masonry__container > * {
+        width: calc(50% - var(--spacing--350));
+    }
+}
+@media (min-width: 960px) {
+    .masonry__container > * {
+        width: calc(33% - var(--spacing--350));
+    }
+}
+@media (min-width: 1280px) {
+    .masonry__container > * {
+        width: calc(25% - var(--spacing--350));
+    }
+}
+
+.masonry__trigger {
+    display: block;
+    margin: 0 auto var(--spacing--200);
+    border: 1px solid var(--gray-dark);
+    padding: var(--spacing--75) var(--spacing--200);
+    background: var(--gray-light);
+    font-size: var(--font-size--500);
+    font-weight: 700;
+}
+.masonry__trigger:hover {
+    background: var(--gray-dark-t);
+}

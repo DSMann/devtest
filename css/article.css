@@ -1,0 +1,10 @@
+.article section > * {
+    max-width: 600px;
+}
+
+.article .media {
+    float: right;
+    width: 45%;
+    margin: var(--spacing--200);
+    margin-right: 0;
+}

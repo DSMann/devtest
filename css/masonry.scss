@@ -1,0 +1,59 @@
+.masonry {
+    background: var(--gray-light);
+    padding: var(--spacing--350) 0 var(--spacing--350) var(--spacing--350);
+
+    &__container {
+        display: flex;
+        flex-flow: column wrap;
+        align-content: flex-start;
+        width: 100%;
+        margin-bottom: calc(var(--spacing--350) * -1);
+        overflow: hidden;
+
+        > * {
+            margin: 0 var(--spacing--350) var(--spacing--350) 0;
+            width: calc(50% - var(--spacing--350));
+        }
+
+        /*******************************************************
+         * Uncomment for responsive column numbers
+         * Also uncomment either:
+         *     line 175 in masonry.js
+         *     line 169 in masonry.babelified.js
+         *******************************************************/
+
+        // flex-wrap: nowrap;
+        // @media (min-width: $breakpoint--300) {
+        //     flex-wrap: wrap;
+        // }
+        //
+        // > * {
+        //     width: calc(100% - var(--spacing--350));
+        //
+        //     @media (min-width: $breakpoint--300) {
+        //          width: calc(50% - var(--spacing--350));
+        //     }
+        //
+        //     @media (min-width: $breakpoint--500) {
+        //         width: calc(33% - var(--spacing--350));
+        //     }
+        //
+        //     @media (min-width: $breakpoint--600) {
+        //         width: calc(25% - var(--spacing--350));
+        //     }
+        // }
+    }
+
+    &__trigger {
+        display: block;
+        margin: 0 auto var(--spacing--200);
+        border: 1px solid var(--gray-dark);
+        padding: var(--spacing--75) var(--spacing--200);
+        background: var(--gray-light);
+        @extend .title;
+
+        &:hover {
+            background: var(--gray-dark-t);
+        }
+    }
+}
