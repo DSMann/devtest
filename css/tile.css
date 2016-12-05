@@ -40,6 +40,11 @@
         -ms-flex-pack: justify;
             justify-content: space-between;
 }
+.tile--large .title {
+    font-size: var(--font-size--600);
+    font-weight: 300;
+    margin-bottom: var(--spacing--200);
+}
 .tile--large .tile__meta {
     color: var(--blue);
     font-weight: 300;

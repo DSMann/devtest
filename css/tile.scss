@@ -26,6 +26,11 @@
         flex-direction: row;
         justify-content: space-between;
 
+        .title {
+            @extend h2;
+            margin-top: 0;
+        }
+
         .tile__meta {
             color: var(--blue);
             font-weight: 300;
