@@ -1,9 +1,37 @@
-const debounce = (fnEnd, wait, fnStart) => {
+/**************************************************************************************
+ * First, I realize this is an overly complicated method to pull off masonry.
+ * Since I was only tasked with the three of the 4 tasks I decided to experiment
+ * with this one.
+ *
+ * This approach of using flexbox came from the idea that, according to spec,
+ * flexbox columns/rows should break on `break-after`. I like this method
+ * because it works without absolute positioning, allows for the columns to
+ * resize without needing to listen to the resize event, makes finding the
+ * shortest column super simple, preserves the original order of the tiles,
+ * and can change the number of coluns fairly simply.  Depending on the styles
+ * on the masonry items the last point can even occur with no specific styles
+ * in the stylesheet (though I wouldn't rely on that).  Sadly, `break-after`
+ * doesn't affect flexbox in any browser but firefox.  Most of the complications
+ * here stem from that fact and were even made worse by the different rounding
+ * methods of the various browsers.
+ *
+ * THIS IS NOT PRODUCTION WORTHY CODE... but when/if `break-after` is fully
+ * supported it could be.  Instead this turned into a very rudementary pollyfill
+ * for `break-after`.  The original (and working) firefox version can be found here:
+ * http://codepen.io/DSMann/pen/dOmRoB?editors=0010.
+ ***************************************************************************************/
+
+// Slightly modified debounce function that calls two functions one at the
+// first call, and one after the set amount of time after the final call
+const debounce = (fnEnd, wait, fnStart) =>
+{
     let timer;
 
-    return (...args) => {
+    return (...args) =>
+    {
         let self = this,
-            complete = () => {
+            complete = () =>
+            {
                 fnEnd.apply(self, args);
                 timer = undefined;
             };
@@ -14,11 +42,15 @@ const debounce = (fnEnd, wait, fnStart) => {
     };
 };
 
+// Returns the html for a tile given it's data.  Image is split out for readability
 const buildTile = ({image, alt, heading, content, meta, order}) => {
-    if(image) {
+    if (image)
+    {
         alt = alt || image.split(`/`).pop().replace(/\..*$/, ``);
         image = `<img class="media__image" src="${image}" alt="${alt}">`;
-    } else {
+    }
+    else
+    {
         image = ``;
     }
 
@@ -32,123 +64,163 @@ const buildTile = ({image, alt, heading, content, meta, order}) => {
     ${(meta && `<p class="tile__meta">${meta}</p>`)}
 </article>`
 },
-      rebuildTiles = (container) => {
-          if(!container.ready) return false;
 
-          const tiles = container.builtTiles;
+// Rebuilds the tiles on resize
+// This only fires on media queries with `break-after`
+rebuildTiles = (container) => {
+    // Fail fast if a build is already in progress
+    if(!container.ready) return false;
 
-          container.builtTiles = [];
-          container.innerHTML = ``;
-          buildColumnStops(container);
-          insertTiles(container, tiles);
+    const tiles = container.builtTiles;
 
-          container.style.height = `${Math.ceil(Math.max(...Array.from(container.columns, col => col.offsetTop))) + 1}px`;
-      },
+    // Reset the container
+    container.builtTiles = [];
+    container.innerHTML = ``;
+    buildColumnStops(container);
 
-      insertTiles = (container, tiles) => {
-          const tile = tiles.shift();
-          let startHeight, order;
+    // Reinsert all of the tiles that had been put into place.
+    insertTiles(container, tiles);
 
-          if(!tile) {
-              container.ready = true;
-              return false;
-          }
+    // Reset the height of the container - not needed with `break-after`
+    container.style.height = `${Math.ceil(Math.max(...Array.from(container.columns, col => col.offsetTop))) + 1}px`;
+},
 
-          ({startHeight, order} = getShortestColumn(container))
-          container.ready = false;
-          container.builtTiles.push(tile);
-          container.insertAdjacentHTML(`beforeend`, buildTile({...tile, order}));
+// Inserts a given set of tiles one at a time, recursively
+insertTiles = (container, tiles) => {
+    // Set container to ready and stop recursion if no tiles are passed in.
+    if(!tiles || !tiles.length) {
+        container.ready = true;
+        return false;
+    }
 
-          if(tile.image) {
-              let img = container.lastElementChild.querySelector(`.media__image`);
-              img.addEventListener(`load`, () => adjustHeight(container, startHeight, tiles));
-              img.addEventListener(`error`, () => adjustHeight(container, startHeight, tiles));
-          } else {
-              adjustHeight(container, startHeight, tiles);
-          }
-      },
+    // Set container to not ready
+    container.ready = false;
 
-      adjustHeight = (container, startHeight, tiles) => {
-          const containerHeight = container.getBoundingClientRect().height,
-                lastInsertHeight = container.lastElementChild.getBoundingClientRect().height;
+    const tile = tiles.shift(),
+        {startHeight, order} = getShortestColumn(container);
 
-          container.style.height = `${Math.ceil(Math.max(containerHeight, startHeight + lastInsertHeight)) + 1}px`;
+    container.builtTiles.push(tile);
+    container.insertAdjacentHTML(`beforeend`, buildTile({...tile, order}));
 
-          fillGap(container);
-          insertTiles(container, tiles);
-      },
+    // If there's an image, wait for it to either load or fail before adjusting the
+    // column stops so that the next tile is put in the right column
+    if(tile.image) {
+        let img = container.lastElementChild.querySelector(`.media__image`);
+        img.addEventListener(`load`, () => adjustHeight(container, startHeight, tiles));
+        img.addEventListener(`error`, () => adjustHeight(container, startHeight, tiles));
+    } else {
+        adjustHeight(container, startHeight, tiles);
+    }
+},
 
-      fillGap = (container) => {
-          container.columns.forEach((col) => {
-              col.style.height = 0;
-              let height = Math.floor(container.getBoundingClientRect().height - col.offsetTop) - 1;
-              col.style.height = `${height}px`;
-          });
-      },
+// Adjusts the height of container to force column breaks - not needed with `break-after`
+adjustHeight = (container, startHeight, tiles) => {
+    const containerHeight = container.getBoundingClientRect().height,
+        lastInsertHeight = container.lastElementChild.getBoundingClientRect().height;
 
-      getShortestColumn = ({childElementCount, columns}) => {
-          let startHeight = 0, order = 0;
+    // Uses the the max between the newest column height and the old container height for the new container height
+    // Firefox rounds differently, so the height of the container is purposfully set a ~2px too large
+    container.style.height = `${Math.ceil(Math.max(containerHeight, startHeight + lastInsertHeight)) + 1}px`;
 
-          if(childElementCount - columns.length < columns.length) {
-              order = childElementCount - columns.length;
-          } else {
-              const colHeights = Array.from(columns, col => col.offsetTop);
-              startHeight = Math.min(...colHeights);
-              order = colHeights.indexOf(startHeight);
-          }
+    fillGap(container);
 
-          return {startHeight, order: order * 2};
-      },
+    // Recursive call to add the next tile
+    insertTiles(container, tiles);
+},
 
-      buildColumnStops = (container) => {
-          let columnCount = container.numColumns,
-              newTile;
+// Sets the column stops to fill the gap between the end of the column and the container
+// so the upermost tile in the next column can't move over - not needed with `break-after`
+fillGap = (container) => {
+    container.columns.forEach((col) => {
+        col.style.height = 0;
+        // A pixel is removed from the column height to allow for rounding differences.
+        let height = Math.floor(container.getBoundingClientRect().height - col.offsetTop) - 1;
+        col.style.height = `${height}px`;
+    });
+},
 
-          while(columnCount--) {
-              newTile = `<div class="masonry__column-stop" style="order: ${columnCount * 2 + 1}"></div>`;
-              container.insertAdjacentHTML(`afterbegin`, newTile);
-          }
+// Finds the shortest column
+getShortestColumn = ({childElementCount, columns}) => {
+    let startHeight = 0, order = 0;
 
-          container.columns = container.querySelectorAll(`.masonry__column-stop`);
-      },
+    // Adds an exception to the default shortest column logic for the
+    // first tile in each column - not needed with `break after`
+    if(childElementCount - columns.length < columns.length) {
+        order = childElementCount - columns.length;
+    } else {
+        // This is the default logic for finding the shortest column
+        const colHeights = Array.from(columns, col => col.offsetTop);
+        startHeight = Math.min(...colHeights);
+        order = colHeights.indexOf(startHeight);
+    }
 
-      handleQueries = (queryList, queries, container) => {
-          container.numColumns = queryList.reduce((numCol, query) => {
-              return query.matches ? queries[query.media] : numCol
-          }, 1);
-      },
+    // Order is multiplied by two so that the tiles are always even (or zero)
+    // while the column stops are odd (makes insertion logic easier)
+    return {startHeight, order: order * 2};
+},
 
-      setupQueries = (queries, container) => {
-          let queryList = Object.keys(queries).map(query => {
-              query = window.matchMedia(query);
-              query.addListener(() => handleQueries(queryList, queries, container));
+// Builds the column stops based on how many columns should be inserted
+buildColumnStops = (container) => {
+    let columnCount = container.numColumns,
+        newTile;
 
-              return query;
-          });
+    while(columnCount--) {
+        // order is multiplied by two and increased by one to make
+        // the columns stops odd for easier tile insertion logic
+        newTile = `<div class="masonry__column-stop" style="order: ${columnCount * 2 + 1}"></div>`;
+        container.insertAdjacentHTML(`afterbegin`, newTile);
+    }
 
-          handleQueries(queryList, queries, container);
-      },
+    // Store the column stops for later use
+    container.columns = container.querySelectorAll(`.masonry__column-stop`);
+},
 
-      init = (container, tiles, {loadAmount = 5, numColumns = 2, queries} = {}) => {
-          container.numColumns = numColumns;
+// Adjusts the number of columns based on provided media queries and rebuilds the tiles
+// If no media queries match it's set back to what it was before
+handleQueries = (queryList, queries, container) => {
+    container.numColumns = queryList.reduce((numCol, query) => {
+        return query.matches ? queries[query.media] : numCol
+    }, container.numColumns);
 
-          (queries && setupQueries(queries, container))
+    rebuildTiles(container);
+},
 
-          buildColumnStops(container);
-          container.tiles = tiles;
-          container.builtTiles = [];
-          container.ready = true;
+// Builds the matchMedia listeners
+setupQueries = (queries, container) => {
+    let queryList = Object.keys(queries).map(query => {
+        query = window.matchMedia(query);
+        query.addListener(() => handleQueries(queryList, queries, container));
 
-          window.addEventListener(`resize`, debounce((e) => rebuildTiles(container), 100, () => {
-              container.columns.forEach((col) => {col.style.height = 0;})
-          }));
+        return query;
+    });
 
-          return (trigger) => {
-              insertTiles(container, container.tiles.splice(0, loadAmount));
+    // Run once to make sure the proper number of columns are being built.
+    handleQueries(queryList, queries, container);
+},
 
-              (!container.tiles.length && trigger.remove())
-          };
-      };
+// Sets up the needed information for masonry as well as the configurable options
+// and returns a function to add the set amount of tiles
+init = (container, tiles, {loadAmount = 5, numColumns = 2, queries = {}} = {}) => {
+    container.numColumns = numColumns;
+    container.tiles = tiles;
+    container.builtTiles = [];
+
+    setupQueries(queries, container);
+    buildColumnStops(container);
+
+    // Listen for resize event to keep the height of the container (and the column stops)
+    // from breaking - not needed with `break-after`
+    window.addEventListener(`resize`, debounce((e) => rebuildTiles(container), 100, () => {
+        container.columns.forEach((col) => {col.style.height = 0;})
+    }));
+
+    // Adds the set amount of tiles and removes the trigger when finished
+    return (trigger) => {
+        insertTiles(container, container.tiles.splice(0, loadAmount));
+
+        (!container.tiles.length && trigger && trigger.remove())
+    };
+};
 
 const queries = {
     '(min-width: 600px)': 2,
@@ -156,8 +228,8 @@ const queries = {
     '(min-width: 1280px)': 4
 },
 
-      container = document.querySelector(`.masonry__container`),
-      trigger = document.querySelector(`button`);
+container = document.querySelector(`.masonry__container`),
+trigger = document.querySelector(`button`);
 
 fetch('//codepen.mannfolio.com/json/masonry-data.json').then(function(response) {
     if(response.ok) {
@@ -167,11 +239,11 @@ fetch('//codepen.mannfolio.com/json/masonry-data.json').then(function(response) 
             }
 
             /*******************************************************
-             * Uncomment for responsive column numbers
-             * Also uncomment either:
-             *     lines 31 - 55 in masonry.css
-             *     lines 25 - 44 in masonry.scss
-             *******************************************************/
+            * Uncomment for responsive column numbers
+            * Also uncomment either:
+            *     lines 31 - 55 in masonry.css
+            *     lines 25 - 44 in masonry.scss
+            *******************************************************/
             const addTile = init(container, data.tiles/*, {queries}*/);
 
             addTile(trigger);
@@ -180,7 +252,7 @@ fetch('//codepen.mannfolio.com/json/masonry-data.json').then(function(response) 
     } else {
         container.innerHTML = `<div class="error">An error occured</div>`
     }
-})
+});
 
 function buildDummyData() {
     return {

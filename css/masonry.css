@@ -24,11 +24,11 @@
  /*******************************************************
   * Uncomment for responsive column numbers
   * Also uncomment either:
-  *     line 175 in masonry.js
-  *     line 169 in masonry.babelified.js
+  *     line 247 in masonry.js
+  *     line 170 in masonry.babelified.js
   *******************************************************/
 
-.masonry__container {
+/*.masonry__container {
     flex-wrap: nowrap;
 }
 .masonry__container > * {
@@ -52,7 +52,7 @@
     .masonry__container > * {
         width: calc(25% - var(--spacing--350));
     }
-}
+}*/
 
 .masonry__trigger {
     display: block;

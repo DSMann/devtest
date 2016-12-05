@@ -52,16 +52,15 @@ var buildTile = function buildTile(_ref) {
             return col.offsetTop;
         }))) + 1 + 'px';
     }, insertTiles = function insertTiles(container, tiles) {
-        var tile = tiles.shift();
-        var startHeight = undefined, order = undefined;
-        if (!tile) {
+        if (!tiles || !tiles.length) {
             container.ready = true;
             return false;
         }
-        var _getShortestColumn = getShortestColumn(container);
-        startHeight = _getShortestColumn.startHeight;
-        order = _getShortestColumn.order;
         container.ready = false;
+        var tile = tiles.shift();
+        var _getShortestColumn = getShortestColumn(container);
+        var startHeight = _getShortestColumn.startHeight;
+        var order = _getShortestColumn.order;
         container.builtTiles.push(tile);
         container.insertAdjacentHTML('beforeend', buildTile(_extends({}, tile, { order: order })));
         if (tile.image) {
@@ -114,7 +113,8 @@ var buildTile = function buildTile(_ref) {
     }, handleQueries = function handleQueries(queryList, queries, container) {
         container.numColumns = queryList.reduce(function (numCol, query) {
             return query.matches ? queries[query.media] : numCol;
-        }, 1);
+        }, container.numColumns);
+        rebuildTiles(container);
     }, setupQueries = function setupQueries(queries, container) {
         var queryList = Object.keys(queries).map(function (query) {
             query = window.matchMedia(query);
@@ -130,13 +130,13 @@ var buildTile = function buildTile(_ref) {
         var loadAmount = _ref3$loadAmount === undefined ? 5 : _ref3$loadAmount;
         var _ref3$numColumns = _ref3.numColumns;
         var numColumns = _ref3$numColumns === undefined ? 2 : _ref3$numColumns;
-        var queries = _ref3.queries;
+        var _ref3$queries = _ref3.queries;
+        var queries = _ref3$queries === undefined ? {} : _ref3$queries;
         container.numColumns = numColumns;
-        queries && setupQueries(queries, container);
-        buildColumnStops(container);
         container.tiles = tiles;
         container.builtTiles = [];
-        container.ready = true;
+        setupQueries(queries, container);
+        buildColumnStops(container);
         window.addEventListener('resize', debounce(function (e) {
             return rebuildTiles(container);
         }, 100, function () {
@@ -146,7 +146,7 @@ var buildTile = function buildTile(_ref) {
         }));
         return function (trigger) {
             insertTiles(container, container.tiles.splice(0, loadAmount));
-            !container.tiles.length && trigger.remove();
+            !container.tiles.length && trigger && trigger.remove();
         };
     };
 var queries = {
@@ -160,13 +160,14 @@ fetch('//codepen.mannfolio.com/json/masonry-data.json').then(function (response)
             if (!data) {
                 data = buildDummyData();
             }
+
             /*******************************************************
              * Uncomment for responsive column numbers
              * Also uncomment either:
              *     lines 31 - 55 in masonry.css
              *     lines 25 - 44 in masonry.scss
              *******************************************************/
-            var addTile = init(container, data.tiles/*, { queries: queries }*/);
+            var addTile = init(container, data.tiles/*, {queries}*/);
             addTile(trigger);
             trigger.addEventListener('click', function () {
                 return addTile(trigger);
@@ -235,5 +236,4 @@ function buildDummyData() {
             }
         ]
     };
-}
-;
+};
